@@ -1,3 +1,6 @@
+import iziToast from 'izitoast';
+import 'izitoast/dist/css/iziToast.min.css';
+
 import { getImagesByQuery } from './pixabay-api.js';
 import {
   createGallery,
@@ -36,10 +39,13 @@ export class Search {
     event.preventDefault();
 
     if (!this.query) {
-      // input can't be empty
+      iziToast.warning({
+        title: 'Caution',
+        message: "Input can't be empty!",
+        position: 'topRight',
+      });
     }
 
-    // make sure that we clean results from previous search term
     if (this.page === DEFAULT_PAGE) {
       this.loadedImages = 0;
       clearGallery();
@@ -51,7 +57,11 @@ export class Search {
       const data = await getImagesByQuery(this.query, this.page);
 
       if (!data.hits.length) {
-        // no images for your query
+        iziToast.error({
+          title: 'Error',
+          message: 'Sorry, no images for your search',
+          position: 'topRight',
+        });
         return;
       }
 
@@ -64,7 +74,18 @@ export class Search {
         showLoadMoreButton();
       } else {
         hideLoadMoreButton();
+        iziToast.info({
+          title: 'Info',
+          message: "We're sorry, but you've reached the end of search results.",
+          position: 'topRight',
+        });
       }
+    } catch (error) {
+      iziToast.error({
+        title: 'Error',
+        message: 'Sorry, something went wrong. Please try again later',
+        position: 'topRight',
+      });
     } finally {
       hideLoader();
     }
