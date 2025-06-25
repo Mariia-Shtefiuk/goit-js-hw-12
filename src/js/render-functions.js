@@ -4,7 +4,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const gallery = document.querySelector('.gallery');
 const lightbox = new SimpleLightbox('.gallery a');
 const loader = document.querySelector('.loader');
-const loadMore = document.querySelector('.loadMore');
+const loadMore = document.querySelector('.load-more');
 
 export const createGallery = images => {
   const markup = images
