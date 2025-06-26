@@ -38,18 +38,18 @@ export class Search {
     });
   }
 
-  handleSearchChange(event) {
-    const newQuery = event.target.value.trim();
+  async handleSubmit(event) {
+    event.preventDefault();
+
+    const newQuery = form
+      .querySelector('input[name="search-text"]')
+      .value.trim();
 
     if (this.query !== newQuery) {
       this.page = DEFAULT_PAGE;
     }
 
     this.query = newQuery;
-  }
-
-  async handleSubmit(event) {
-    event.preventDefault();
 
     if (!this.query) {
       iziToast.warning({
@@ -57,6 +57,7 @@ export class Search {
         message: "Input can't be empty!",
         position: 'topRight',
       });
+      return;
     }
 
     if (this.page === DEFAULT_PAGE) {
@@ -119,9 +120,7 @@ export class Search {
 const search = new Search();
 
 const form = document.querySelector('.form');
-const input = form.querySelector('input[name="search-text"]');
 const loadMore = document.querySelector('.load-more');
 
-input.addEventListener('change', event => search.handleSearchChange(event));
 form.addEventListener('submit', event => search.handleSubmit(event));
 loadMore.addEventListener('click', event => search.handleLoadMore(event));
